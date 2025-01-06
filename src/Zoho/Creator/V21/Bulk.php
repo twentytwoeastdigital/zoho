@@ -24,8 +24,10 @@ class Bulk
     protected static $bulkRequestCount; 
     protected static $lastDownloadRequestTime; 
     protected static $downloadRequestCount;
+    protected $overrideCache;
+    protected $cacheDuration;
 
-    public function __construct(ZohoOAuth $zohoOAuth, $endpoint)
+    public function __construct(ZohoOAuth $zohoOAuth, $endpoint, $overrideCache = false, $cacheDuration = 600)
     {
         $this->zohoOAuth = $zohoOAuth;
         $this->endpoint = $endpoint;
@@ -40,6 +42,8 @@ class Bulk
         self::$bulkRequestCount = self::$bulkRequestCount ?? 0; 
         self::$lastDownloadRequestTime = self::$lastDownloadRequestTime ?? microtime(true); 
         self::$downloadRequestCount = self::$downloadRequestCount ?? 0;
+        $this->overrideCache = $overrideCache;
+        $this->cacheDuration = $cacheDuration;
     }
 
     protected function throttle($type) { 
@@ -80,12 +84,12 @@ class Bulk
         return "{$this->apiBaseUrl}{$this->apiVersion}/bulk/{$this->appOwner}/{$this->appLinkName}/report/{$endpoint}";
     }
 
-    public function request($overrideCache = true, $cacheDuration = 600)
+    public function request()
     {
         $endpoints = is_array($this->endpoint) ? $this->endpoint : [$this->endpoint];
         $cacheKeys = array_map(fn($endpoint) => "bulk_{$endpoint}", $endpoints);
 
-        if (!$overrideCache) {
+        if (!$this->overrideCache) {
             $cachedResults = [];
             foreach ($cacheKeys as $index => $cacheKey) {
                 if (Cache::has($cacheKey)) {
@@ -124,7 +128,7 @@ class Bulk
         }
 
         foreach ($results as $endpoint => $data) {
-            Cache::put("bulk_{$endpoint}", $data, $cacheDuration);
+            Cache::put("bulk_{$endpoint}", $data, $this->cacheDuration);
         }
 
         return $results;
