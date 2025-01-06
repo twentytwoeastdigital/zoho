@@ -34,6 +34,13 @@ class ZohoCreator
         return $response;
     }
 
+    public function bulk($endpoint, $cache_override = false, $cache_duration = 600)
+    {
+        $request = new Bulk($this->zohoOAuth, $endpoint);
+        $response = $request->request($cache_override, $cache_duration);
+        return $response;
+    }
+
     public function create($endpoint, $data)
     {
         $request = new Create($this->zohoOAuth, $endpoint, $data);

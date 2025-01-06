@@ -108,9 +108,13 @@ class Bulk
         $results = [];
         while (count($results) < count($endpoints) && $call_count < $this->max_calls) {
             foreach ($requestIDs as $endpoint => $requestID) {
-                if (!isset($results[$endpoint]) && strtolower($this->checkRequest($endpoint, $requestID)['details']['status']) == 'completed') {
+                if(isset($results[$endpoint])) {
+                    continue;
+                }
+                if (strtolower($this->checkRequest($endpoint, $requestID)['details']['status']) == 'completed') {
                     $this->throttle('download');
                     $results[$endpoint] = $this->downloadRequest($endpoint, $requestID);
+                    continue;
                 }
             }
             if (count($results) < count($endpoints)) {

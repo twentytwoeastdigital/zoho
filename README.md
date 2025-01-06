@@ -2,7 +2,7 @@
 
 ## Overview
 
-This package is an API wrapper for Zoho. This package provides tools for interacting the Zoho API. Currently it only supports Zoho Creator.
+This package provides tools for interacting the Zoho API. Currently it supports Zoho Creator, Zoho Books and Zoho CRM.
 
 ## Features
 - Built-in Throttle Control
@@ -31,7 +31,7 @@ This package is an API wrapper for Zoho. This package provides tools for interac
     TWENTYTWOEASTDIGITAL_ZOHO_CREATOR_APP_LINK_NAME=""
 
 ### 3. Add optional variables to ENV
-    Scopes? 
+    Coming Soon 
 
 
 ### 4. Make Initial OAuth Request
@@ -69,6 +69,26 @@ This package is an API wrapper for Zoho. This package provides tools for interac
     Example set Cache Time to 5 seconds: ZohoCreator::getById('Report_Name', $id, false, 5);
 
     Response: Array of Record Values
+
+##### Bulk Download for Single Record
+    Definition: ZohoCreator::bulk(REPORT_NAME, BYPASS_CACHE (Optional), BYPASS_DEFAULT_CACHE_TIME_IN_SECONDS (Optional));
+
+    Example with Caching: ZohoCreator::bulk('Report_Name', $id);
+    Example bypassing Cache:  ZohoCreator::bulk('Report_Name', true);
+    Example set Cache Time to 5 seconds: ZohoCreator::bulk('Report_Name', false, 5);
+
+    Response: Array of Record Values Keyed by Report Name
+    
+##### Bulk Download for Array of Records
+    Requests to Zoho are made at all once, rather than sequential so that the data is processed faster. 
+
+    Definition: ZohoCreator::bulk([REPORT_NAME, REPORT_NAME2, REPORT_NAME3], RECORD_ID, BYPASS_CACHE (Optional), BYPASS_DEFAULT_CACHE_TIME_IN_SECONDS (Optional));
+
+    Example with Caching: ZohoCreator::bulk('Report_Name', $id);
+    Example bypassing Cache:  ZohoCreator::bulk('Report_Name', $id, true);
+    Example set Cache Time to 5 seconds: ZohoCreator::bulk('Report_Name', $id, false, 5);
+
+    Response: Array of Record Values Keyed by Report Name
 
 #### Update
 
