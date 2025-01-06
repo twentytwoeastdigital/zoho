@@ -1,0 +1,30 @@
+{
+    "name": "twentytwoeastdigital/zoho",
+    "description": "A Laravel package for Zoho API integration",
+    "type": "library",
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "*"
+    },
+    "autoload": {
+        "classmap": [ "src/" ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TwentyTwoEastDigital\\Zoho\\Providers\\ZohoServiceProvider"
+            ],
+            "aliases": {
+                "Zoho": "TwentyTwoEastDigital\\Zoho\\Facades\\Zoho"
+            }
+        }
+    },
+    "authors": [
+        {
+            "name": "TwentyTwoEastDigital",
+            "email": "team@22EastDigital.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "license": "MIT"
+}
