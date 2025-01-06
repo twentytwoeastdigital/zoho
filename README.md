@@ -2,7 +2,7 @@
 
 ## Overview
 
-Twentytwoeastdigital is an API wrapper for Zoho. This package provides tools for interacting the Zoho API. Currently it only supports Zoho Creator.
+This package is an API wrapper for Zoho. This package provides tools for interacting the Zoho API. Currently it only supports Zoho Creator.
 
 ## Features
 - Built-in Throttle Control
