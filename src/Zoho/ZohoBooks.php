@@ -4,6 +4,7 @@ namespace TwentyTwoEastDigital\Zoho;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use TwentyTwoEastDigital\Zoho\Books\V30\Create;
 use TwentyTwoEastDigital\Zoho\Books\V30\Read;
 
 class ZohoBooks
@@ -27,6 +28,13 @@ class ZohoBooks
     {
         $request = new Read($this->zohoOAuth, $organizationId, $endpoint, $cache_override, $cache_duration);
         $response = $request->getRecordById($query);
+        return $response;
+    }
+
+    public function create($organizationId, $endpoint, $data)
+    {
+        $request = new Create($this->zohoOAuth, $organizationId, $endpoint);
+        $response = $request->request($data);
         return $response;
     }
 }

@@ -56,7 +56,8 @@ class Bulk
             { 
                 if ($timeSinceLastRequest < 60) 
                 { 
-                    usleep((60 - $timeSinceLastRequest) * 1e6); 
+                    $sleepTime = (int)((60 - $timeSinceLastRequest) * 1e6);
+                    usleep($sleepTime);  
                 } 
                 self::$bulkRequestCount = 0; 
             } 
@@ -70,7 +71,8 @@ class Bulk
             { 
                 if ($timeSinceLastRequest < 60) 
                 { 
-                    usleep((60 - $timeSinceLastRequest) * 1e6); 
+                    $sleepTime = (int)((60 - $timeSinceLastRequest) * 1e6);
+                    usleep($sleepTime);
                 } 
                 self::$downloadRequestCount = 0; 
             } 
@@ -144,7 +146,7 @@ class Bulk
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 60,
+            CURLOPT_TIMEOUT => 240,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_HTTPHEADER => array(
@@ -174,7 +176,7 @@ class Bulk
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 60,
+            CURLOPT_TIMEOUT => 240,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
@@ -204,7 +206,7 @@ class Bulk
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 60,
+            CURLOPT_TIMEOUT => 240,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(

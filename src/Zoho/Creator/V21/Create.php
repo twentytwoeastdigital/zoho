@@ -46,6 +46,7 @@ class Create
         if ($timeSinceLastRequest < $this->rateLimitInterval)
         {
             $sleepTime = ($this->rateLimitInterval - $timeSinceLastRequest) * 1e6; // Convert to microseconds
+            $sleepTime = (int)$sleepTime;
             usleep($sleepTime);
         }
         self::$lastRequestTime = microtime(true);
@@ -62,7 +63,7 @@ class Create
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => '',
             CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 60,
+            CURLOPT_TIMEOUT        => 240,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST  => 'POST',
             CURLOPT_POSTFIELDS     => json_encode(['data' => [$this->data]]),

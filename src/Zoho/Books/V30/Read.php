@@ -52,6 +52,7 @@ class Read
         if ($timeSinceLastRequest < $this->rateLimitInterval)
         {
             $sleepTime = ($this->rateLimitInterval - $timeSinceLastRequest) * 1e6; // Convert to microseconds
+            $sleepTime = (int)$sleepTime;
             usleep($sleepTime);
         }
         self::$lastRequestTime = microtime(true);
