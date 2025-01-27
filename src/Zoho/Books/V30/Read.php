@@ -60,54 +60,65 @@ class Read
 
     public function getRecords($query = null)
     {
-        // todo: add paging
         $cacheKey = "books_v3_{$this->organizationId}_{$this->module}_records";
 
         if (!$this->overrideCache && Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
 
-        $this->throttle();
-        $requestUrl = $this->buildUrl();
+        $allRecords = [];
+        $currentPage = 1;
+        $maxPages = 200;
+        $recordsPerPage = 200;
 
-        if (!empty($query)) {
-            $requestUrl .= "&{$query}";
-        }
+        do {
+            $this->throttle();
 
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL            => $requestUrl,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => '',
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 30,
-            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => 'GET',
-            CURLOPT_HTTPHEADER     => array(
-                'Authorization: Zoho-oauthtoken ' . $this->zohoOAuth->getAccessToken(),
-                'Content-Type: application/json',
-                'Accept: application/json'
-            ),
-        ));
+            $requestUrl = $this->buildUrl();
+            $requestUrl .= "&page={$currentPage}&per_page={$recordsPerPage}";
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            return ['success' => false, 'error' => $err];
-        } else {
-            $response_json = json_decode($response, true);
-            Cache::put($cacheKey, ['success' => true, 'response' => $response_json], $this->cacheDuration);
-            if(isset($response_json[$this->module]))
-            {
-                return $response_json[$this->module];
+            if (!empty($query)) {
+                $requestUrl .= "&{$query}";
             }
-            else
-            {
-                return $response_json;
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL            => $requestUrl,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING       => '',
+                CURLOPT_MAXREDIRS      => 10,
+                CURLOPT_TIMEOUT        => 30,
+                CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST  => 'GET',
+                CURLOPT_HTTPHEADER     => array(
+                    'Authorization: Zoho-oauthtoken ' . $this->zohoOAuth->getAccessToken(),
+                    'Content-Type: application/json',
+                    'Accept: application/json'
+                ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err) {
+                return ['success' => false, 'error' => $err];
             }
-        }
+
+            $responseJson = json_decode($response, true);
+
+            if (isset($responseJson['contacts'])) {
+                $allRecords = array_merge($allRecords, $responseJson['contacts']);
+            }
+
+            $hasMorePage = $responseJson['page_context']['has_more_page'] ?? false;
+            $currentPage++;
+
+        } while ($hasMorePage && $currentPage <= $maxPages);
+
+        Cache::put($cacheKey, $allRecords, $this->cacheDuration);
+
+        return $allRecords;
     }
 
     public function getRecordById($recordId)
