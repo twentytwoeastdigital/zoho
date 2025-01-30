@@ -68,7 +68,7 @@ class Read
 
         $allRecords = [];
         $currentPage = 1;
-        $maxPages = 200;
+        $maxPages = 600;
         $recordsPerPage = 200;
 
         do {
@@ -107,8 +107,8 @@ class Read
 
             $responseJson = json_decode($response, true);
 
-            if (isset($responseJson['contacts'])) {
-                $allRecords = array_merge($allRecords, $responseJson['contacts']);
+            if (isset($responseJson[$this->module])) {
+                $allRecords = array_merge($allRecords, $responseJson[$this->module]);
             }
 
             $hasMorePage = $responseJson['page_context']['has_more_page'] ?? false;
