@@ -70,6 +70,18 @@ class ZohoServiceProvider extends ServiceProvider
                 config('zoho.books.app_link_name'),
             ); 
         });
+
+        $this->app->singleton('zoho.analytics', function ($app) { 
+            return new \TwentyTwoEastDigital\Zoho\ZohoAnalytics( 
+                $app->make('zoho.oauth'), 
+                config('zoho.analytics.api_version'), 
+                config('zoho.analytics.rate_limit_interval'),
+                config('zoho.analytics.api_base_url'),
+                config('zoho.analytics.paging.default_per_page'),
+                config('zoho.analytics.app_owner'),
+                config('zoho.analytics.app_link_name'),
+            ); 
+        });
     }
 
 }

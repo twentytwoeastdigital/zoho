@@ -61,6 +61,7 @@ return [
         'ZohoCreator.bulk.READ',
         'ZohoBooks.fullaccess.all',
         'ZohoCreator.report.DELETE',
+        'ZohoAnalytics.data.read',
     ],
 
     /*
