@@ -4,6 +4,7 @@ namespace TwentyTwoEastDigital\Zoho;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use TwentyTwoEastDigital\Zoho\CRM\V70\Create;
 use TwentyTwoEastDigital\Zoho\CRM\V70\Read;
 
 class ZohoCRM
@@ -27,6 +28,13 @@ class ZohoCRM
     {
         $request = new Read($this->zohoOAuth, $endpoint);
         $response = $request->getRecordById($recordId);
+        return $response;
+    }
+
+    public function create($endpoint, $data)
+    {
+        $request = new Create($this->zohoOAuth, $endpoint, $data);
+        $response = $request->request();
         return $response;
     }
 }
