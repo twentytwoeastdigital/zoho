@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use TwentyTwoEastDigital\Zoho\Books\V30\Create;
 use TwentyTwoEastDigital\Zoho\Books\V30\Read;
+use TwentyTwoEastDigital\Zoho\Books\V30\Update;
 
 class ZohoBooks
 {
@@ -35,6 +36,13 @@ class ZohoBooks
     {
         $request = new Create($this->zohoOAuth, $organizationId, $endpoint);
         $response = $request->request($data);
+        return $response;
+    }
+
+    public function update($organizationId, $endpoint, $recordId, $data)
+    {
+        $request = new Update($this->zohoOAuth, $organizationId, $endpoint);
+        $response = $request->request($recordId, $data);
         return $response;
     }
 }
