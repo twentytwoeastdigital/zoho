@@ -4,7 +4,6 @@ namespace TwentyTwoEastDigital\Zoho\Creator\V21;
 
 use TwentyTwoEastDigital\Zoho\ZohoOAuth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class Read
 {

@@ -107,8 +107,9 @@ class Read
 
             $responseJson = json_decode($response, true);
 
-            if (isset($responseJson[$this->module])) {
-                $allRecords = array_merge($allRecords, $responseJson[$this->module]);
+            $module_name = $this->convertModuleName($this->module);
+            if (isset($responseJson[$module_name])) {
+                $allRecords = array_merge($allRecords, $responseJson[$module_name]);
             }
 
             $hasMorePage = $responseJson['page_context']['has_more_page'] ?? false;
@@ -169,5 +170,25 @@ class Read
                 return ['success' => false, 'error' => 'Record not found.'];
             }
         }
+    }
+
+    private function convertModuleName($moduleName)
+    {
+        if (strpos($moduleName, '/') !== false) {
+            $moduleName = explode('/', $moduleName);
+            $moduleName = end($moduleName);
+        }
+
+        $moduleMap = [
+            'contactpersons' => 'contact_persons',
+            'recurringinvoices' => 'recurring_invoices',
+            'customerpayments' => 'customer_payments',
+            'recurringexpenses' => 'recurring_expenses',
+            'basecurrencyadjustment' => 'recurring_expenses',
+            'timeentries' => 'time_entries',
+        ];
+
+        $module = $moduleMap[$moduleName] ?? $moduleName;
+        return $module;
     }
 }
