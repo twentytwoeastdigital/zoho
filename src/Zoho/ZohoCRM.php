@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use TwentyTwoEastDigital\Zoho\CRM\V70\Create;
 use TwentyTwoEastDigital\Zoho\CRM\V70\Read;
+use TwentyTwoEastDigital\Zoho\CRM\V70\Update;
 
 class ZohoCRM
 {
@@ -34,6 +35,13 @@ class ZohoCRM
     public function create($endpoint, $data)
     {
         $request = new Create($this->zohoOAuth, $endpoint, $data);
+        $response = $request->request();
+        return $response;
+    }
+
+    public function update($endpoint, $recordId, $data)
+    {
+        $request = new Update($this->zohoOAuth, $endpoint, $recordId, $data);
         $response = $request->request();
         return $response;
     }
