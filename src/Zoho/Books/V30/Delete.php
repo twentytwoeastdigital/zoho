@@ -21,7 +21,7 @@ class Delete
         $this->organizationId    = $organizationId;
         $this->module            = $module;
         $this->apiVersion        = 'v3';
-        $this->rateLimitInterval = config('zoho.books.rate_limit_interval');
+        $this->rateLimitInterval = (float) config('zoho.books.rate_limit_interval', 1.0);
         self::$lastRequestTime   = self::$lastRequestTime ?? microtime(true);
         $this->apiBaseUrl        = 'https://www.zohoapis.com/books/';
     }
