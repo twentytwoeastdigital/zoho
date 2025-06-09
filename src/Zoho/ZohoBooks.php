@@ -5,6 +5,7 @@ namespace TwentyTwoEastDigital\Zoho;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use TwentyTwoEastDigital\Zoho\Books\V30\Create;
+use TwentyTwoEastDigital\Zoho\Books\V30\Delete;
 use TwentyTwoEastDigital\Zoho\Books\V30\Read;
 use TwentyTwoEastDigital\Zoho\Books\V30\Update;
 
@@ -43,6 +44,13 @@ class ZohoBooks
     {
         $request = new Update($this->zohoOAuth, $organizationId, $endpoint);
         $response = $request->request($recordId, $data);
+        return $response;
+    }
+
+    public function delete($organizationId, $endpoint, $recordId)
+    {
+        $request = new Delete($this->zohoOAuth, $organizationId, $endpoint);
+        $response = $request->request($recordId);
         return $response;
     }
 }
